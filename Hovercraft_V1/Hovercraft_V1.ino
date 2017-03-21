@@ -52,6 +52,7 @@ long next_time = 0;
 long time_next1 = 0;
 long start_time;
 long elapsed;
+long stop_time=0;
 
 //timer state variable
 int toggle = 0;
@@ -179,22 +180,20 @@ void loop() {
 //..........................................................................................................................//
 //Timer
 
-    if ((PS4.getButtonClick(CROSS))&&(toggle==0)) {
-      toggle = toggle + 1;
-      start_time = millis();
-    }
-    else{
-      if(PS4.getButtonClick(CROSS)){
-        toggle = toggle + 1;
+    if (PS4.getButtonClick(CROSS)) {
+      if (toggle==0){
+        start_time = millis();
       }
+      toggle = toggle + 1;
     }
-    
+    Serial.print(toggle);
     if (toggle%2==1) {
-      elapsed = (millis()-start_time);
+      elapsed = (millis()-start_time+stop_time);
     }
     
     if (toggle%2==0) {
-      start_time=(start_time+(millis()-elapsed));
+      start_time=millis();
+      stop_time=elapsed;
     }
     
     if ((PS4.getButtonClick(CIRCLE))) {
