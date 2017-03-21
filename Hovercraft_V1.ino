@@ -47,11 +47,10 @@ uint8_t oldL2Value, oldR2Value;
 StopWatch sw_millis;    // MILLIS (default)
 StopWatch sw_secs(StopWatch::SECONDS);
 int xstate = 0;
-int next_time = 0;
-int time_next1 = 0;
+long next_time = 0;
+long time_next1 = 0;
 int pos = 0;
 int payload = 0;
-bool toggle = 0;
 Servo myservo;
 
 
@@ -84,7 +83,7 @@ void loop() {
 //Determine state for LCD
 
   if (PS4.connected()) {
-  int current_time = millis();
+  long current_time = millis();
   if (PS4.getAnalogHat(LeftHatX) > 137 || PS4.getAnalogHat(LeftHatX) < 117 || PS4.getAnalogHat(LeftHatY) > 137 || PS4.getAnalogHat(LeftHatY) < 117 || PS4.getAnalogHat(RightHatX) > 137 || PS4.getAnalogHat(RightHatX) < 117 || PS4.getAnalogHat(RightHatY) > 137 || PS4.getAnalogHat(RightHatY) < 117) {
      if (next_time < current_time)
      {
