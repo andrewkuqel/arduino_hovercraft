@@ -8,7 +8,6 @@
 #include <usbhub.h>
 #include <Servo.h>
 #include "LiquidCrystal.h"
-#include <StopWatch.h>
 
 LiquidCrystal lcd(2,3,4,5,6,7);
 // VSS GROUND
@@ -44,11 +43,12 @@ PS4BT PS4(&Btd, PAIR);
 
 bool printAngle, printTouch;
 uint8_t oldL2Value, oldR2Value;
-StopWatch sw_millis;    // MILLIS (default)
-StopWatch sw_secs(StopWatch::SECONDS);
 int xstate = 0;
 long next_time = 0;
 long time_next1 = 0;
+long start_time;
+long elapsed;
+int toggle = 0;
 int pos = 0;
 int payload = 0;
 Servo myservo;
@@ -126,7 +126,7 @@ void loop() {
       lcd.setCursor(0,0);
       lcd.print("  Time Elapsed  ");
       lcd.setCursor(0,1);
-      lcd.print(sw_secs.elapsed());
+      lcd.print(elapsed/1000);
       }
 
         
@@ -152,7 +152,7 @@ void loop() {
 
   } 
     else{
-    if ((PS4.getAnalogButton(R2))&&(current_time > time_next1)&&(pos==160)) {
+    if ((PS4.getAnalogButton(R2))&&(current_time > time_next1)&&(pos==165)) {
     pos = 0;
     myservo.write (pos);
     time_next1= millis() + 500;
@@ -163,20 +163,25 @@ void loop() {
 //Timer
 
 if ((PS4.getButtonClick(CROSS))&&(toggle==0)) {
-    toggle = !toggle;
-    sw_secs.start();
+    toggle = toggle + 1;
+    start_time = millis();
+}
+else{
+    if(PS4.getButtonClick(CROSS)){
+    toggle = toggle + 1;
     }
-if ((PS4.getButtonClick(CROSS))&&(toggle==1)) {
-    toggle = !toggle;
-    sw_secs.stop();
+}
+if (toggle%2==1) {
+    elapsed = (millis()-start_time);
     }
-    if ((PS4.getButtonClick(CROSS))&&(toggle==1)) {
-    toggle = !toggle;
-    sw_secs.stop();
+    
+if (toggle%2==0) {
+    start_time=(start_time+(millis()-elapsed));
     }
+   
 if ((PS4.getButtonClick(CIRCLE))) {
-    toggle = !toggle;
-    sw_secs.reset();
+    toggle = 0;
+    elapsed=0;
     }
 
 //..........................................................................................................................
