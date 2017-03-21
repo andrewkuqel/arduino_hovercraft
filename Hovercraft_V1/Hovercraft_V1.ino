@@ -120,6 +120,7 @@ void loop() {
       lcd.print("Payloads Dropped");
       lcd.setCursor(0,1);
       lcd.print(payload);
+      lcd.print("                ");
       }
       
     if (xstate==2){
@@ -127,6 +128,7 @@ void loop() {
       lcd.print("  Time Elapsed  ");
       lcd.setCursor(0,1);
       lcd.print(elapsed/1000);
+      lcd.print("                ");
       }
 
         
@@ -189,5 +191,7 @@ if ((PS4.getButtonClick(CIRCLE))) {
     if (PS4.getButtonClick(PS)) {
       Serial.print(F("\r\nPS"));
       PS4.disconnect();
+      //someway to reset the arduino, maybe a wire connected to the arduino reset??
+      //this would allow for the ps4 controller to reset the arduino in the event of an issue
     }
   }  }
